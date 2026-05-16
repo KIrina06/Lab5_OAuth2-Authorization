@@ -44,9 +44,9 @@
 									"type": "text"
 								},
 								{
-									"key": "scope",
-									"value": "openid",
-									"type": "text"
+								  "key": "scope",
+								  "value": "openid profile email",
+								  "type": "text"
 								},
 								{
 									"key": "username",
@@ -67,6 +67,11 @@
 									"key": "client_secret",
 									"value": "{{clientSecret}}",
 									"type": "text"
+								},
+								{
+								  "key": "audience",
+								  "value": "https://car-rental-api",
+								  "type": "text"
 								}
 							]
 						},
