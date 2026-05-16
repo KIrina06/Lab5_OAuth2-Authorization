@@ -57,5 +57,12 @@ jobs:
           kubectl rollout status deployment/rental-service --timeout=180s
           kubectl rollout status deployment/payment-service --timeout=180s
 
+      - name: Export auth env
+        run: |
+          echo "CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "CLIENT_SECRET=${{ secrets.AUTH0_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "AUTH_USERNAME=${{ secrets.AUTH0_USERNAME }}" >> $GITHUB_ENV
+          echo "AUTH_PASSWORD=${{ secrets.AUTH0_PASSWORD }}" >> $GITHUB_ENV
+          
       - name: Autograding
         uses: education/autograding@v1
