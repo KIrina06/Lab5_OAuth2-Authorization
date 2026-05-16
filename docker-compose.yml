@@ -1,0 +1,112 @@
+services:
+  postgres:
+    image: library/postgres:13
+    container_name: postgres
+    restart: on-failure
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "55432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  payment-service:
+    image: kirina06/payment-service:latest
+    build:
+      context: .
+      dockerfile: payment_service/Dockerfile
+    container_name: payment-service
+    restart: always
+    ports:
+      - "8050:8050"
+    environment:
+      DB_NAME: payments
+      DB_USER: program
+      DB_PASSWORD: test
+      DB_HOST: postgres
+      DB_PORT: 5432
+
+      AUTH0_ISSUER: https://dev-5o8igifch4ha6z4p.us.auth0.com/
+      AUTH0_AUDIENCE: https://car-rental-api
+      AUTH0_JWKS_URI: https://dev-5o8igifch4ha6z4p.us.auth0.com/.well-known/jwks.json
+
+    depends_on:
+      - postgres
+
+  rental-service:
+    image: kirina06/rental-service:latest
+    build:
+      context: .
+      dockerfile: rental_service/Dockerfile
+    container_name: rental-service
+    restart: always
+    ports:
+      - "8060:8060"
+    environment:
+      DB_NAME: rentals
+      DB_USER: program
+      DB_PASSWORD: test
+      DB_HOST: postgres
+      DB_PORT: 5432
+
+      AUTH0_ISSUER: https://dev-5o8igifch4ha6z4p.us.auth0.com/
+      AUTH0_AUDIENCE: https://car-rental-api
+      AUTH0_JWKS_URI: https://dev-5o8igifch4ha6z4p.us.auth0.com/.well-known/jwks.json
+
+    depends_on:
+      - postgres
+
+  cars-service:
+    image: kirina06/cars-service:latest
+    build:
+      context: .
+      dockerfile: cars_service/Dockerfile
+    container_name: cars-service
+    restart: always
+    ports:
+      - "8070:8070"
+    environment:
+      DB_NAME: cars
+      DB_USER: program
+      DB_PASSWORD: test
+      DB_HOST: postgres
+      DB_PORT: 5432
+
+      AUTH0_ISSUER: https://dev-5o8igifch4ha6z4p.us.auth0.com/
+      AUTH0_AUDIENCE: https://car-rental-api
+      AUTH0_JWKS_URI: https://dev-5o8igifch4ha6z4p.us.auth0.com/.well-known/jwks.json
+
+    depends_on:
+      - postgres
+
+  gateway-service:
+    image: kirina06/gateway-service:latest
+    build:
+      context: .
+      dockerfile: gateway_service/Dockerfile
+    container_name: gateway-service
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      CARS_SERVICE_URL: http://cars-service:8070
+      PAYMENT_SERVICE_URL: http://payment-service:8050
+      RENTAL_SERVICE_URL: http://rental-service:8060
+
+      AUTH0_ISSUER: https://dev-5o8igifch4ha6z4p.us.auth0.com/
+      AUTH0_AUDIENCE: https://car-rental-api
+      AUTH0_JWKS_URI: https://dev-5o8igifch4ha6z4p.us.auth0.com/.well-known/jwks.json
+
+    depends_on:
+      - cars-service
+      - payment-service
+      - rental-service
+
+volumes:
+  postgres_data:

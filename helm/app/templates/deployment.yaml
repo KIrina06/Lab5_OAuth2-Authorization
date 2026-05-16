@@ -1,0 +1,29 @@
+{{- range $key, $svc := .Values.services }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $svc.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ $svc.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $svc.name }}
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: {{ $svc.name }}
+          image: {{ $svc.image }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ $svc.port }}
+          env:
+            {{- range $envName, $envValue := $svc.env }}
+            - name: {{ $envName }}
+              value: {{ $envValue | quote }}
+            {{- end }}
+---
+{{- end }}

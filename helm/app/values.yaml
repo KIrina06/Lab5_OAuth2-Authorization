@@ -1,0 +1,72 @@
+services:
+  gateway:
+    name: gateway-service
+    image: kirina06/gateway-service:latest
+    port: 8080
+    env:
+      CARS_SERVICE_URL: http://cars-service:8070
+      PAYMENT_SERVICE_URL: http://payment-service:8050
+      RENTAL_SERVICE_URL: http://rental-service:8060
+      AUTH0_ISSUER: https://dev-5o8igifch4ha6z4p.us.auth0.com/
+      AUTH0_AUDIENCE: https://car-rental-api
+      AUTH0_JWKS_URI: https://dev-5o8igifch4ha6z4p.us.auth0.com/.well-known/jwks.json
+
+  cars:
+    name: cars-service
+    image: kirina06/cars-service:latest
+    port: 8070
+    env:
+      DB_NAME: cars
+      DB_USER: program
+      DB_PASSWORD: test
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      AUTH0_ISSUER: https://dev-5o8igifch4ha6z4p.us.auth0.com/
+      AUTH0_AUDIENCE: https://car-rental-api
+      AUTH0_JWKS_URI: https://dev-5o8igifch4ha6z4p.us.auth0.com/.well-known/jwks.json
+
+  rental:
+    name: rental-service
+    image: kirina06/rental-service:latest
+    port: 8060
+    env:
+      DB_NAME: rentals
+      DB_USER: program
+      DB_PASSWORD: test
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      AUTH0_ISSUER: https://dev-5o8igifch4ha6z4p.us.auth0.com/
+      AUTH0_AUDIENCE: https://car-rental-api
+      AUTH0_JWKS_URI: https://dev-5o8igifch4ha6z4p.us.auth0.com/.well-known/jwks.json
+
+  payment:
+    name: payment-service
+    image: kirina06/payment-service:latest
+    port: 8050
+    env:
+      DB_NAME: payments
+      DB_USER: program
+      DB_PASSWORD: test
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      AUTH0_ISSUER: https://dev-5o8igifch4ha6z4p.us.auth0.com/
+      AUTH0_AUDIENCE: https://car-rental-api
+      AUTH0_JWKS_URI: https://dev-5o8igifch4ha6z4p.us.auth0.com/.well-known/jwks.json
+
+ingress:
+  enabled: true
+  host: ""
+  serviceName: gateway-service
+  servicePort: 8080
+
+postgres:
+  enabled: true
+  name: postgres
+  image: postgres:13
+  port: 5432
+  user: program
+  password: test
+  databases:
+    - cars
+    - rentals
+    - payments
