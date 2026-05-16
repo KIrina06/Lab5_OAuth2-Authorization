@@ -4,32 +4,32 @@
   "values": [
     {
       "key": "serviceUrl",
-      "value": "",
+      "value": "http://111.88.157.16",
       "enabled": true
     },
     {
       "key": "identityProviderUrl",
-      "value": "",
+      "value": "https://dev-5o8igifch4ha6z4p.us.auth0.com",
       "enabled": true
     },
     {
       "key": "username",
-      "value": "",
+      "value": "user@mail.ru",
       "enabled": true
     },
     {
       "key": "password",
-      "value": "",
+      "value": "qwerty123456!@#$%^",
       "enabled": true
     },
     {
       "key": "clientId",
-      "value": "",
+      "value": "jX3cnw3VGYRSq8ZSG685xUMgyktg8Xlx",
       "enabled": true
     },
     {
       "key": "clientSecret",
-      "value": "",
+      "value": "PVBN-IUTx4eFEuExMrG7Cp7WZOtImR7A83q0k3tDLh0nLvy4XIC88wBUlWHvaOab",
       "enabled": true
     }
   ],
