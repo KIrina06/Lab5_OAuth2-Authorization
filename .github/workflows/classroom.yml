@@ -64,5 +64,19 @@ jobs:
           echo "AUTH_USERNAME=${{ secrets.AUTH0_USERNAME }}" >> $GITHUB_ENV
           echo "AUTH_PASSWORD=${{ secrets.AUTH0_PASSWORD }}" >> $GITHUB_ENV
 
+      - name: Patch Postman environment
+        run: |
+          jq '.values |= map(
+            if .key == "serviceUrl" then .value = "http://111.88.157.16"
+            elif .key == "identityProviderUrl" then .value = "https://dev-5o8igifch4ha6z4p.us.auth0.com"
+            elif .key == "clientId" then .value = "${{ secrets.AUTH0_CLIENT_ID }}"
+            elif .key == "clientSecret" then .value = "${{ secrets.AUTH0_CLIENT_SECRET }}"
+            elif .key == "username" then .value = "${{ secrets.AUTH0_USERNAME }}"
+            elif .key == "password" then .value = "${{ secrets.AUTH0_PASSWORD }}"
+            else .
+            end
+          )' v3/postman/environment.json > environment.tmp.json
+          mv environment.tmp.json v3/postman/environment.json
+
       - name: Autograding
         uses: education/autograding@v1

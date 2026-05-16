@@ -3,7 +3,7 @@
     {
       "name": "Run Postman",
       "setup": "",
-      "run": "newman run v3/postman/collection.json -e v3/postman/environment.json --env-var serviceUrl=http://111.88.157.16 --env-var identityProviderUrl=https://dev-5o8igifch4ha6z4p.us.auth0.com --env-var clientId=$CLIENT_ID --env-var clientSecret=$CLIENT_SECRET --env-var username=$AUTH_USERNAME --env-var password=$AUTH_PASSWORD",
+      "run": "newman run v3/postman/collection.json -e v3/postman/environment.json",
       "input": "",
       "output": "",
       "comparison": "included",

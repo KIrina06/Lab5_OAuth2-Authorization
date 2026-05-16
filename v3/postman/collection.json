@@ -44,9 +44,9 @@
 									"type": "text"
 								},
 								{
-								  "key": "scope",
-								  "value": "openid profile email",
-								  "type": "text"
+									"key": "scope",
+									"value": "openid profile email",
+									"type": "text"
 								},
 								{
 									"key": "username",
