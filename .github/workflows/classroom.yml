@@ -57,8 +57,5 @@ jobs:
           kubectl rollout status deployment/rental-service --timeout=180s
           kubectl rollout status deployment/payment-service --timeout=180s
 
-      - name: Make scripts executable
-        run: chmod +x ./scripts/test-script.sh
-
       - name: Autograding
         uses: education/autograding@v1
